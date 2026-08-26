@@ -1,0 +1,39 @@
+flowchart TB
+  subgraph Grower["Grower"]
+    U[Operator / owner]
+    TG[Telegram]
+  end
+
+  subgraph App["Plant Mood app"]
+    QS[Quick-start flow]
+    DES[2D / 3D farm designer]
+    OP[Digital-twin operator]
+    CALC[Public calculators]
+    SHOP[Public shop]
+  end
+
+  subgraph Data["Supabase"]
+    AUTH[Auth]
+    DB[(Layouts, batches, tasks, orders)]
+    STORE[Guides and generated files]
+  end
+
+  subgraph Auto["n8n"]
+    ALERT[Status and harvest alerts]
+    DOCS[Shopping lists and grow documents]
+  end
+
+  U --> QS
+  QS --> DES
+  DES --> OP
+  U --> CALC
+  U --> SHOP
+  DES --> AUTH
+  OP --> DB
+  SHOP --> DB
+  CALC --> DB
+  DB --> ALERT
+  ALERT --> TG
+  OP --> DOCS
+  DOCS --> STORE
+  STORE --> U

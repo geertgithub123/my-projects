@@ -1,0 +1,51 @@
+flowchart LR
+  subgraph Client["Customer"]
+    U[Acme Health user]
+  end
+
+  subgraph App["Product app"]
+    WEB[Next.js dashboard]
+  end
+
+  subgraph Pay["Billing"]
+    STRIPE[Stripe Checkout]
+  end
+
+  subgraph Data["Supabase"]
+    AUTH[Auth + RLS]
+    DB[(Jobs, frameworks, controls, evidence requests)]
+    STORE[Object storage]
+    EDGE[Edge functions]
+    CRON[Scheduled jobs]
+    MAIL[Transactional email]
+  end
+
+  subgraph Orch["Orchestration"]
+    N8N[n8n workflows]
+  end
+
+  subgraph Workers["Workers"]
+    SCAN[Recon and assessment tools]
+    AI[AI evidence-review agent]
+    PDF[Deliverable generator]
+  end
+
+  U --> WEB
+  WEB --> AUTH
+  WEB --> STRIPE
+  STRIPE -->|payment confirmed| EDGE
+  WEB -->|questionnaire + uploads| DB
+  WEB --> STORE
+  EDGE -->|job envelope| N8N
+  CRON --> EDGE
+  N8N --> SCAN
+  N8N --> AI
+  N8N --> PDF
+  SCAN -->|findings| DB
+  AI -->|review results| DB
+  PDF -->|report files| STORE
+  N8N -->|status callback| EDGE
+  EDGE --> DB
+  EDGE --> MAIL
+  MAIL --> U
+  WEB -->|download deliverable| STORE

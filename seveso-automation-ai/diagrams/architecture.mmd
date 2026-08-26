@@ -1,0 +1,51 @@
+flowchart TB
+  subgraph Site["On-prem LAN — no public cloud"]
+    subgraph Users["Roles"]
+      OP[Operations]
+      LAB[Lab]
+      MGT[Management]
+      ADM[Admin]
+    end
+
+    PROXY[Reverse proxy]
+
+    subgraph App["Local app"]
+      UI[Dashboard + RAG chat]
+      LIB[Knowledge library]
+      MEET[Meetings and summaries]
+      VIZ[Process / lab visualisation]
+    end
+
+    subgraph Data["Local data plane"]
+      DB[(Database + time series)]
+      OBJ[Document object store]
+      VEC[Vector store]
+    end
+
+    subgraph AI["Local AI"]
+      EMB[Embedding model]
+      LLM[Local LLM]
+    end
+
+    N8N[n8n workflows]
+  end
+
+  OP --> PROXY
+  LAB --> PROXY
+  MGT --> PROXY
+  ADM --> PROXY
+  PROXY --> UI
+  UI --> LIB
+  UI --> MEET
+  UI --> VIZ
+  UI --> DB
+  LIB --> OBJ
+  OBJ --> N8N
+  N8N --> EMB
+  EMB --> VEC
+  UI --> VEC
+  VEC --> LLM
+  LLM --> UI
+  VIZ --> DB
+  MEET --> OBJ
+  N8N --> DB
